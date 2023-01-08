@@ -1,0 +1,369 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>哔哩哔哩Websocket协议逆向 | 憨憨Asadzの博客</title><meta name="author" content="Asadz"><meta name="copyright" content="Asadz"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Websocket是什么在一般的爬虫中都是用到Get Post来请求，这些请求方式都是无状态的服务端无法主动向客户端发送数据。 而websocket的出现就解决了这个问题 它是有状态的请求，这就意味着它允许服务端主动向客户端推送数据，使得客户端和服务端之间的数据交换变得更加简单。 Websocket有哪些方法、属性 — 知己知彼方能百战百胜方法    名称 作用    close[code[, r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="哔哩哔哩Websocket协议逆向">
+<meta property="og:url" content="http://example.com/2023/01/08/BilibiliWebsocket/index.html">
+<meta property="og:site_name" content="憨憨Asadzの博客">
+<meta property="og:description" content="Websocket是什么在一般的爬虫中都是用到Get Post来请求，这些请求方式都是无状态的服务端无法主动向客户端发送数据。 而websocket的出现就解决了这个问题 它是有状态的请求，这就意味着它允许服务端主动向客户端推送数据，使得客户端和服务端之间的数据交换变得更加简单。 Websocket有哪些方法、属性 — 知己知彼方能百战百胜方法    名称 作用    close[code[, r">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/BilibiliWebsocket/BilibiliWebsocket1.jpg">
+<meta property="article:published_time" content="2023-01-08T03:45:06.000Z">
+<meta property="article:modified_time" content="2023-01-08T17:03:27.438Z">
+<meta property="article:author" content="Asadz">
+<meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="JS逆向">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/BilibiliWebsocket/BilibiliWebsocket1.jpg"><link rel="shortcut icon" href="/img/avatar.jpg"><link rel="canonical" href="http://example.com/2023/01/08/BilibiliWebsocket/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '哔哩哔哩Websocket协议逆向',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-01-09 01:03:27'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.2"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">1</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/BilibiliWebsocket/BilibiliWebsocket1.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">憨憨Asadzの博客</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">哔哩哔哩Websocket协议逆向</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-01-08T03:45:06.000Z" title="发表于 2023-01-08 11:45:06">2023-01-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-01-08T17:03:27.438Z" title="更新于 2023-01-09 01:03:27">2023-01-09</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Websocket是什么"><a href="#Websocket是什么" class="headerlink" title="Websocket是什么"></a>Websocket是什么</h1><p>在一般的爬虫中都是用到Get Post来请求，这些请求方式都是无状态的服务端无法主动向客户端发送数据。</p>
+<p>而websocket的出现就解决了这个问题 它是有状态的请求，这就意味着它允许服务端主动向客户端推送数据，使得客户端和服务端之间的数据交换变得更加简单。</p>
+<h1 id="Websocket有哪些方法、属性-—-知己知彼方能百战百胜"><a href="#Websocket有哪些方法、属性-—-知己知彼方能百战百胜" class="headerlink" title="Websocket有哪些方法、属性 — 知己知彼方能百战百胜"></a>Websocket有哪些方法、属性 — 知己知彼方能百战百胜</h1><p>方法</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>close[code[, reason]]</td>
+<td>关闭当前连接</td>
+</tr>
+<tr>
+<td>send(data)</td>
+<td>发送数据(排队)</td>
+</tr>
+</tbody></table>
+<p>属性</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>binaryType</td>
+<td>使用二进制的数据类型连接</td>
+</tr>
+<tr>
+<td>wbufferedAmount</td>
+<td>没发送到服务器的字节数</td>
+</tr>
+<tr>
+<td>extensions</td>
+<td>服务器选择的扩展</td>
+</tr>
+<tr>
+<td>onclose</td>
+<td>指定关闭后的回调函数</td>
+</tr>
+<tr>
+<td>onerror</td>
+<td>指定失败后的回调函数</td>
+</tr>
+<tr>
+<td>onmessage</td>
+<td>指定从服务器接收到信息时的回调函数</td>
+</tr>
+<tr>
+<td>onopen</td>
+<td>指定连接成功后的回调函数</td>
+</tr>
+<tr>
+<td>protocol</td>
+<td>服务器选择的下属协议</td>
+</tr>
+<tr>
+<td>readyState</td>
+<td>当前服务器的链接状态</td>
+</tr>
+<tr>
+<td>url</td>
+<td>Websocket的绝对路径</td>
+</tr>
+</tbody></table>
+<p>其中爬虫主要关注 send 方法的调用 和 onmessage 所绑定的回调函数。</p>
+<p>因为服务器推送的数据第一时间会调用onmessage绑定的函数 可能进行 解码 或者 解密 等操作；</p>
+<p>而 send 方法则是我们要发送的心跳包 或者 进房数据等 与 服务端进行连接 和 保持连接 的时候会用到。</p>
+<h1 id="逆向过程"><a href="#逆向过程" class="headerlink" title="逆向过程"></a>逆向过程</h1><h2 id="进房数据"><a href="#进房数据" class="headerlink" title="进房数据"></a>进房数据</h2><p>随便找一个直播间点进去，打开开发者工具 <del>(基操)</del></p>
+<p><img src="/img/BilibiliWebsocket/1.png"></p>
+<p>可以在过滤一栏选择ws然后刷新网页获得ws请求的数据</p>
+<p><img src="/img/BilibiliWebsocket/2.png"></p>
+<p>这里可以看到 请求的数据有两个 其中sub是二进制数据 <del>看不懂</del> 但是在另一个包里 虽然是明文数据但是没有我们要的弹幕数据 进房数据等 所以铁定是sub这个包</p>
+<p>然后从启动器中 直接定位到创建Websocket对象的位置并打下断点刷新</p>
+<p><img src="/img/BilibiliWebsocket/3.png"></p>
+<p>网站停在了创建Websocket对象的位置</p>
+<p>这个时候可以写一段js代码对send方法进行hook</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里一定要让 ws对象被创建以后再HOOK</span></span><br><span class="line"><span class="comment">// 用send_来保留原函数</span></span><br><span class="line"><span class="variable language_">this</span>.<span class="property">ws</span>.<span class="property">send_</span> = <span class="variable language_">this</span>.<span class="property">ws</span>.<span class="property">send</span></span><br><span class="line"><span class="comment">// 重写原函数</span></span><br><span class="line"><span class="variable language_">this</span>.<span class="property">ws</span>.<span class="property">send</span> = <span class="keyword">function</span>(<span class="params">t</span>) &#123; <span class="comment">// 因为send方法有个必传的参数data所以这里也要</span></span><br><span class="line">    <span class="keyword">debugger</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">ws</span>.<span class="title function_">send_</span>(t);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/img/BilibiliWebsocket/4.png"></p>
+<p>然后继续执行send方法被调用的时候会被 hook断下来 断下来以后往上面一个栈看 </p>
+<p><img src="/img/BilibiliWebsocket/5.png"></p>
+<p>断在了30167行 但是很明显 t是在30163行的时候被赋值的 </p>
+<p>在 30163 行下断点然后刷新网页</p>
+<p><img src="/img/BilibiliWebsocket/6.png"></p>
+<p>停下来以后 不难发现 i 就是进房数据 </p>
+<p>o.a.WS_OP_USER_AUTHENTICATION 根据名字来推断 可能是拿来确认我们发的是什么包</p>
+<p>进入函数中细看</p>
+<p><img src="/img/BilibiliWebsocket/7.png"></p>
+<p>其中 <em>r.a.getEncoder() 是 TextEncoder Object 的UTF8</em></p>
+<p>o.a.WS_PACKAGE_HEADER_TOTAL_LENGTH 是一个常量 数值为 16 根据名字推断是头包长度</p>
+<p>o.a.WS_PACKAGE_OFFSET 为 0 是用来偏移的 0 就是不偏移</p>
+<p>随后 定义了一个 i 变量 是个视窗用来放编码后的数据</p>
+<p>定义一个 s 变量用来存放 t(进房数据) UTF8编码后的数据</p>
+<p>随后的 this.wsBinaryHeaderList 是一个列表</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[&#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Header Length&quot;</span>,</span><br><span class="line">    <span class="string">&quot;key&quot;</span>: <span class="string">&quot;headerLen&quot;</span>,</span><br><span class="line">    <span class="string">&quot;bytes&quot;</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">&quot;offset&quot;</span>: <span class="number">4</span>,</span><br><span class="line">    <span class="string">&quot;value&quot;</span>: <span class="number">16</span></span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Protocol Version&quot;</span>,</span><br><span class="line">    <span class="string">&quot;key&quot;</span>: <span class="string">&quot;ver&quot;</span>,</span><br><span class="line">    <span class="string">&quot;bytes&quot;</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">&quot;offset&quot;</span>: <span class="number">6</span>,</span><br><span class="line">    <span class="string">&quot;value&quot;</span>: <span class="number">1</span></span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Operation&quot;</span>,</span><br><span class="line">    <span class="string">&quot;key&quot;</span>: <span class="string">&quot;op&quot;</span>,</span><br><span class="line">    <span class="string">&quot;bytes&quot;</span>: <span class="number">4</span>,</span><br><span class="line">    <span class="string">&quot;offset&quot;</span>: <span class="number">8</span>,</span><br><span class="line">    <span class="string">&quot;value&quot;</span>: <span class="number">1</span></span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Sequence Id&quot;</span>,</span><br><span class="line">    <span class="string">&quot;key&quot;</span>: <span class="string">&quot;seq&quot;</span>,</span><br><span class="line">    <span class="string">&quot;bytes&quot;</span>: <span class="number">4</span>,</span><br><span class="line">    <span class="string">&quot;offset&quot;</span>: <span class="number">12</span>,</span><br><span class="line">    <span class="string">&quot;value&quot;</span>: <span class="number">1</span></span><br><span class="line">&#125;]</span><br></pre></td></tr></table></figure>
+
+<p>使用了forEach对立面的每个元素都进行了处理</p>
+<p>根据列表中的内容 还有处理的函数 可以知道包的样子</p>
+<p><img src="/img/BilibiliWebsocket/8.png"></p>
+<p>头包长度也就固定为int32+int16+int16+int32+int32 也就是 16字节 这也说明了为什么 o.a.WS_PACKAGE_HEADER_TOTAL_LENGTH 的值是 16</p>
+<p>然后进房数据 头包长度 协议版本 操作类型 都是固定的 所以需要更改的 也只有数据包长度</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">encode</span>(<span class="params">roomid</span>):</span><br><span class="line">    a = <span class="string">&#x27;&#123;&quot;roomid&quot;:&#x27;</span> + <span class="built_in">str</span>(roomid) + <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">    data = []</span><br><span class="line">    <span class="keyword">for</span> s <span class="keyword">in</span> a:</span><br><span class="line">        data.append(<span class="built_in">ord</span>(s))</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;000000&#123;&#125;001000010000000700000001&quot;</span>.<span class="built_in">format</span>(<span class="built_in">hex</span>(<span class="number">16</span> + <span class="built_in">len</span>(data))[<span class="number">2</span>:]) + <span class="string">&quot;&quot;</span>.join(</span><br><span class="line">        <span class="built_in">map</span>(<span class="keyword">lambda</span> x: x[<span class="number">2</span>:], <span class="built_in">map</span>(<span class="built_in">hex</span>, data)))</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="弹幕、礼物等消息"><a href="#弹幕、礼物等消息" class="headerlink" title="弹幕、礼物等消息"></a>弹幕、礼物等消息</h2><p>这里刷新网页回到Websocket对象被new的地方 因为send关注完了 就要关注onmessage了</p>
+<p>因为 onmessage所指定回调函数会在message事件被触发的时候调用</p>
+<p>这次直接将断点下在指定回调函数的地方</p>
+<p><img src="/img/BilibiliWebsocket/9.png"></p>
+<p>再次刷新调试后 发现data只在一个地方用 调试后也确实得到了能看懂的json数据</p>
+<p><img src="/img/BilibiliWebsocket/10.png"></p>
+<p>点进去查看</p>
+<p><img src="/img/BilibiliWebsocket/11.png"></p>
+<p>初步分析来看 函数中用到了很多的 getInt32 等操作提取指定的数据 可以初步判定为TLV</p>
+<p>TLV:<br>    T 可以理解为 tag type 是用于标识编码格式信息<br>    L 就是Length 表示数值长度<br>    V 就是实际数值</p>
+<p>一些常量:</p>
+<ul>
+<li>o.a.WS_PACKAGE_OFFSET = 0 // 偏移量 0就是无偏移</li>
+<li>o.a.WS_OP_MESSAGE = 5 // Message数据的op 其中这个op就表示这个数据包什么类型的</li>
+<li>o.a.WS_OP_CONNECT_SUCCESS = 8 // 连接成功的 op</li>
+<li>o.a.WS_OP_HEARTBEAT_REPLY = 3 // 心跳回复 op</li>
+<li>o.a.WS_PACKAGE_HEADER_TOTAL_LENGTH = 16 // 包头种长度 其中包头会包含关于这个包的各种数据 比如这个包的长度 这个包有哪些类型</li>
+<li>o.a.WS_BODY_PROTOCOL_VERSION_NORMAL = 0 // 普通消息</li>
+<li>o.a.WS_BODY_PROTOCOL_VERSION_BROTLI = 3 // 压缩消息</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">t.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">convertToObject</span> = <span class="keyword">function</span>(<span class="params">t</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> e = <span class="keyword">new</span> <span class="title class_">DataView</span>(t) <span class="comment">// 新建视图 为ArrayBuffer添加接口 方便后续处理</span></span><br><span class="line">      , n = &#123;</span><br><span class="line">        <span class="attr">body</span>: []</span><br><span class="line">    &#125;; <span class="comment">// 初始化 n 因为一次传来的数据不会是一个 会是很多个所以要用List来接收处理好的数据 最后的数据也会放在body里面</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (n.<span class="property">packetLen</span> = e.<span class="title function_">getInt32</span>(o.<span class="property">a</span>.<span class="property">WS_PACKAGE_OFFSET</span>), <span class="comment">// e.getInt32的作用是:</span></span><br><span class="line">                                                        <span class="comment">//   从字节开始偏移o.a.WS_PACKAGE_OFFSET个字节 读取一个int32的数</span></span><br><span class="line">                                                       <span class="comment">//     这里可以推断出前16个字节的头包里第一个int32数是表示包的长度</span></span><br><span class="line">    </span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">wsBinaryHeaderList</span>.<span class="title function_">forEach</span>(<span class="keyword">function</span>(<span class="params">t</span>) &#123;</span><br><span class="line">        <span class="number">4</span> === t.<span class="property">bytes</span> ? n[t.<span class="property">key</span>] = e.<span class="title function_">getInt32</span>(t.<span class="property">offset</span>) : <span class="number">2</span> === t.<span class="property">bytes</span> &amp;&amp; (n[t.<span class="property">key</span>] = e.<span class="title function_">getInt16</span>(t.<span class="property">offset</span>))</span><br><span class="line">    &#125;),</span><br><span class="line"></span><br><span class="line">    n.<span class="property">packetLen</span> &lt; t.<span class="property">byteLength</span> &amp;&amp; <span class="variable language_">this</span>.<span class="title function_">convertToObject</span>(t.<span class="title function_">slice</span>(<span class="number">0</span>, n.<span class="property">packetLen</span>)), </span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">decoder</span> || (<span class="variable language_">this</span>.<span class="property">decoder</span> = r.<span class="property">a</span>.<span class="title function_">getDecoder</span>()),</span><br><span class="line"></span><br><span class="line">    !n.<span class="property">op</span> || o.<span class="property">a</span>.<span class="property">WS_OP_MESSAGE</span> !== n.<span class="property">op</span> &amp;&amp; n.<span class="property">op</span> !== o.<span class="property">a</span>.<span class="property">WS_OP_CONNECT_SUCCESS</span>) <span class="comment">// 这里是整个if语句的重点</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    经过上面一堆的处理以后</span></span><br><span class="line"><span class="comment">    !n.op 是在n没有op属性 或者op属性为0的时候为真</span></span><br><span class="line"><span class="comment">    o.a.WS_OP_MESSAGE !== n.op op不是message的op的时候为真</span></span><br><span class="line"><span class="comment">    op 不是连接成功的op时为真</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">        n.<span class="property">op</span> &amp;&amp; o.<span class="property">a</span>.<span class="property">WS_OP_HEARTBEAT_REPLY</span> === n.<span class="property">op</span> &amp;&amp; (n.<span class="property">body</span> = &#123;</span><br><span class="line">            <span class="attr">count</span>: e.<span class="title function_">getInt32</span>(o.<span class="property">a</span>.<span class="property">WS_PACKAGE_HEADER_TOTAL_LENGTH</span>)</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里可以分析出 主要的弹幕 礼物等消息的操作是在else的语句里执行的</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = o.<span class="property">a</span>.<span class="property">WS_PACKAGE_OFFSET</span>, s = n.<span class="property">packetLen</span>, a = <span class="string">&quot;&quot;</span>, u = <span class="string">&quot;&quot;</span>; i &lt; t.<span class="property">byteLength</span>; i += s) &#123;</span><br><span class="line">            s = e.<span class="title function_">getInt32</span>(i),</span><br><span class="line">            a = e.<span class="title function_">getInt16</span>(i + o.<span class="property">a</span>.<span class="property">WS_HEADER_OFFSET</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (n.<span class="property">ver</span> === o.<span class="property">a</span>.<span class="property">WS_BODY_PROTOCOL_VERSION_NORMAL</span>) &#123;</span><br><span class="line">                    <span class="keyword">var</span> c = <span class="variable language_">this</span>.<span class="property">decoder</span>.<span class="title function_">decode</span>(t.<span class="title function_">slice</span>(i + a, i + s));</span><br><span class="line">                    u = <span class="number">0</span> !== c.<span class="property">length</span> ? <span class="title class_">JSON</span>.<span class="title function_">parse</span>(c) : <span class="literal">null</span></span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (n.<span class="property">ver</span> === o.<span class="property">a</span>.<span class="property">WS_BODY_PROTOCOL_VERSION_BROTLI</span>) &#123;</span><br><span class="line">                    <span class="keyword">var</span> l = t.<span class="title function_">slice</span>(i + a, i + s)</span><br><span class="line">                      , h = <span class="variable language_">window</span>.<span class="title class_">BrotliDecode</span>(<span class="keyword">new</span> <span class="title class_">Uint8Array</span>(l)); <span class="comment">// zlib解压数据</span></span><br><span class="line">                    u = <span class="variable language_">this</span>.<span class="title function_">convertToObject</span>(h.<span class="property">buffer</span>).<span class="property">body</span></span><br><span class="line">                &#125;</span><br><span class="line">                u &amp;&amp; n.<span class="property">body</span>.<span class="title function_">push</span>(u)</span><br><span class="line">            &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">                <span class="variable language_">this</span>.<span class="property">options</span>.<span class="title function_">onLogger</span>(<span class="string">&quot;decode body error:&quot;</span>, <span class="keyword">new</span> <span class="title class_">Uint8Array</span>(t), n, e)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span> n</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>else里的语句翻译成python大概就是</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">decode</span>(<span class="params">data</span>):</span><br><span class="line">    packetLen = <span class="built_in">int</span>(data[:<span class="number">4</span>].<span class="built_in">hex</span>(), <span class="number">16</span>)</span><br><span class="line">    ver = <span class="built_in">int</span>(data[<span class="number">6</span>:<span class="number">8</span>].<span class="built_in">hex</span>(), <span class="number">16</span>)</span><br><span class="line">    op = <span class="built_in">int</span>(data[<span class="number">8</span>:<span class="number">12</span>].<span class="built_in">hex</span>(), <span class="number">16</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(data) &gt; packetLen:</span><br><span class="line">        decode(data[packetLen:])</span><br><span class="line">        data = data[:packetLen]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ver == <span class="number">2</span>:</span><br><span class="line">        data = zlib.decompress(data[<span class="number">16</span>:])</span><br><span class="line">        decode(data)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> op == <span class="number">5</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            jd = json.loads(data[<span class="number">16</span>:].decode(<span class="string">&#x27;utf-8&#x27;</span>, errors=<span class="string">&#x27;ignore&#x27;</span>))</span><br><span class="line">            <span class="built_in">print</span>(jd)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>至此逆向完成</p>
+<h1 id="完整代码-Python"><a href="#完整代码-Python" class="headerlink" title="完整代码(Python)"></a>完整代码(Python)</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> zlib</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> websockets</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">onmessage</span>(<span class="params">ws</span>):</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        greeting = <span class="keyword">await</span> ws.recv()</span><br><span class="line">        decode(greeting)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">sendHB</span>(<span class="params">ws</span>):</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">await</span> asyncio.sleep(<span class="number">30</span>)</span><br><span class="line">        <span class="keyword">await</span> ws.send(<span class="built_in">bytes</span>.fromhex(hb))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">decode</span>(<span class="params">data</span>):</span><br><span class="line">    packetLen = <span class="built_in">int</span>(data[:<span class="number">4</span>].<span class="built_in">hex</span>(), <span class="number">16</span>)</span><br><span class="line">    ver = <span class="built_in">int</span>(data[<span class="number">6</span>:<span class="number">8</span>].<span class="built_in">hex</span>(), <span class="number">16</span>)</span><br><span class="line">    op = <span class="built_in">int</span>(data[<span class="number">8</span>:<span class="number">12</span>].<span class="built_in">hex</span>(), <span class="number">16</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(data) &gt; packetLen: <span class="comment"># 防止</span></span><br><span class="line">        decode(data[packetLen:])</span><br><span class="line">        data = data[:packetLen]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ver == <span class="number">2</span>:</span><br><span class="line">        data = zlib.decompress(data[<span class="number">16</span>:])</span><br><span class="line">        decode(data)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> op == <span class="number">5</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            jd = json.loads(data[<span class="number">16</span>:].decode(<span class="string">&#x27;utf-8&#x27;</span>, errors=<span class="string">&#x27;ignore&#x27;</span>))</span><br><span class="line">            <span class="keyword">if</span> jd[<span class="string">&#x27;cmd&#x27;</span>] == <span class="string">&#x27;DANMU_MSG&#x27;</span>: <span class="comment"># 普通弹幕消息</span></span><br><span class="line">                <span class="built_in">print</span>(jd[<span class="string">&#x27;info&#x27;</span>][<span class="number">2</span>][<span class="number">1</span>], <span class="string">&#x27;: &#x27;</span>, jd[<span class="string">&#x27;info&#x27;</span>][<span class="number">1</span>])</span><br><span class="line">            <span class="keyword">elif</span> jd[<span class="string">&#x27;cmd&#x27;</span>] == <span class="string">&#x27;SUPER_CHAT_MESSAGE_JPN&#x27;</span>: <span class="comment"># sc醒目提醒</span></span><br><span class="line">                <span class="built_in">print</span>(jd[<span class="string">&quot;data&quot;</span>][<span class="string">&quot;user_info&quot;</span>][<span class="string">&quot;uname&quot;</span>], <span class="string">&quot;:&quot;</span>, jd[<span class="string">&quot;data&quot;</span>][<span class="string">&quot;message&quot;</span>])</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">encode</span>(<span class="params">roomid</span>):</span><br><span class="line">    a = <span class="string">&#x27;&#123;&quot;roomid&quot;:&#x27;</span> + <span class="built_in">str</span>(roomid) + <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">    data = []</span><br><span class="line">    <span class="keyword">for</span> s <span class="keyword">in</span> a:</span><br><span class="line">        data.append(<span class="built_in">ord</span>(s))</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;000000&#123;&#125;001000010000000700000001&quot;</span>.<span class="built_in">format</span>(<span class="built_in">hex</span>(<span class="number">16</span> + <span class="built_in">len</span>(data))[<span class="number">2</span>:]) + <span class="string">&quot;&quot;</span>.join(</span><br><span class="line">        <span class="built_in">map</span>(<span class="keyword">lambda</span> x: x[<span class="number">2</span>:], <span class="built_in">map</span>(<span class="built_in">hex</span>, data)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    roomid = <span class="number">2926481</span></span><br><span class="line">    uri = <span class="string">&quot;wss://broadcastlv.chat.bilibili.com/sub&quot;</span></span><br><span class="line">    data_raw = <span class="built_in">bytes</span>.fromhex(encode(roomid))</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> websockets.connect(uri) <span class="keyword">as</span> websocket:</span><br><span class="line">        <span class="keyword">await</span> websocket.send(data_raw)</span><br><span class="line"></span><br><span class="line">        tasks = [asyncio.create_task(sendHB(websocket)), asyncio.create_task(onmessage(websocket))]</span><br><span class="line">        <span class="keyword">await</span> asyncio.gather(*tasks)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    hb = <span class="string">&quot;00000010001000010000000200000001&quot;</span></span><br><span class="line">    asyncio.run(main())</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="消息类型"><a href="#消息类型" class="headerlink" title="消息类型"></a>消息类型</h1><table>
+<thead>
+<tr>
+<th>cmd</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DANMU_MSG</td>
+<td>弹幕消息</td>
+</tr>
+<tr>
+<td>WELCOME_GUARD</td>
+<td>欢迎…老爷</td>
+</tr>
+<tr>
+<td>ENTRY_EFFECT</td>
+<td>舰长欢迎消息</td>
+</tr>
+<tr>
+<td>WELCOME</td>
+<td>欢迎…进入房间</td>
+</tr>
+<tr>
+<td>SUPER_CHAT_MESSAGE</td>
+<td>醒目留言</td>
+</tr>
+<tr>
+<td>SEND_GIFT</td>
+<td>投喂礼物</td>
+</tr>
+<tr>
+<td>COMBO_SEND</td>
+<td>连击礼物</td>
+</tr>
+<tr>
+<td>ANCHOR_LOT_START</td>
+<td>天选之人开始完整信息</td>
+</tr>
+<tr>
+<td>ANCHOR_LOT_END</td>
+<td>天选之人获奖id</td>
+</tr>
+<tr>
+<td>ANCHOR_LOT_AWARD</td>
+<td>天选之人获奖完整信息</td>
+</tr>
+<tr>
+<td>GUARD_BUY</td>
+<td>上舰长</td>
+</tr>
+<tr>
+<td>USER_TOAST_MSG</td>
+<td>续费了舰长</td>
+</tr>
+<tr>
+<td>NOTICE_MSG</td>
+<td>在本房间续费了舰长</td>
+</tr>
+<tr>
+<td>ACTIVITY_BANNER_UPDATE_V2</td>
+<td>小时榜变动</td>
+</tr>
+<tr>
+<td>ROOM_REAL_TIME_MESSAGE_UPDATE</td>
+<td>粉丝关注变动</td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Asadz</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/01/08/BilibiliWebsocket/">http://example.com/2023/01/08/BilibiliWebsocket/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">憨憨Asadzの博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%88%AC%E8%99%AB/">爬虫</a><a class="post-meta__tags" href="/tags/JS%E9%80%86%E5%90%91/">JS逆向</a></div><div class="post_share"><div class="social-share" data-image="/img/BilibiliWebsocket/BilibiliWebsocket1.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Asadz</div><div class="author-info__description">You don’t stand a single chance to win unless you fight.</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">1</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/wwweww"><i class="fab fa-github"></i><span>My Github</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/wwweww" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2646787260@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">鄙人不才, 写不出公告</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Websocket%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">Websocket是什么</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Websocket%E6%9C%89%E5%93%AA%E4%BA%9B%E6%96%B9%E6%B3%95%E3%80%81%E5%B1%9E%E6%80%A7-%E2%80%94-%E7%9F%A5%E5%B7%B1%E7%9F%A5%E5%BD%BC%E6%96%B9%E8%83%BD%E7%99%BE%E6%88%98%E7%99%BE%E8%83%9C"><span class="toc-number">2.</span> <span class="toc-text">Websocket有哪些方法、属性 — 知己知彼方能百战百胜</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%86%E5%90%91%E8%BF%87%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">逆向过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E6%88%BF%E6%95%B0%E6%8D%AE"><span class="toc-number">3.1.</span> <span class="toc-text">进房数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%B9%E5%B9%95%E3%80%81%E7%A4%BC%E7%89%A9%E7%AD%89%E6%B6%88%E6%81%AF"><span class="toc-number">3.2.</span> <span class="toc-text">弹幕、礼物等消息</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81-Python"><span class="toc-number">4.</span> <span class="toc-text">完整代码(Python)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B"><span class="toc-number">5.</span> <span class="toc-text">消息类型</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/01/08/BilibiliWebsocket/" title="哔哩哔哩Websocket协议逆向"><img src="/img/BilibiliWebsocket/BilibiliWebsocket1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="哔哩哔哩Websocket协议逆向"/></a><div class="content"><a class="title" href="/2023/01/08/BilibiliWebsocket/" title="哔哩哔哩Websocket协议逆向">哔哩哔哩Websocket协议逆向</a><time datetime="2023-01-08T03:45:06.000Z" title="发表于 2023-01-08 11:45:06">2023-01-08</time></div></div></div></div></div></div></main><footer id="footer" style="background: #00000000"><div id="footer-wrap"><div class="footer_custom_text">创作不易、抄袭可耻</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div></div></body></html>
