@@ -1,0 +1,13 @@
+/* 页脚去色 */
+#footer {
+    background: none;
+}
+/* 使用opacity可以设置当前透明度，避免切换dark模式产生颜色单一的问题 */
+/* 文章栏变色 */
+#recent-posts>.recent-post-item,.layout_page>div:first-child:not(.recent-posts),.layout_post>#page,.layout_post>#post,.read-mode .layout_post>#post {
+    opacity: 0.9;
+}
+/* 侧边栏去色 */
+#aside-content .card-widget {
+    opacity: 0.9;
+}
